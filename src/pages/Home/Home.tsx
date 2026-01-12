@@ -1,34 +1,39 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Post from "../../components/Post/Post";
+import { usePosts } from "../../contexts/PostsContext";
 import { postsService } from "../../services/posts.service";
-import type { PostList } from "../../types/blog";
 import styles from "./Home.module.scss";
 
 export default function Home() {
-    const [posts, setPosts] = useState<PostList>([]);
+    const { posts, setPosts } = usePosts();
+    const [searchParams] = useSearchParams();
+
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
+
+    const q = (searchParams.get("q") ?? "").trim().toLowerCase();
 
     useEffect(() => {
-        const controller = new AbortController();
-
         setLoading(true);
         setError(null);
 
         postsService
-            .list(controller.signal)
-            .then((data) => {
-                setPosts(data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                if (err instanceof DOMException && err.name === "AbortError") return;
-                setError(err instanceof Error ? err.message : "Unknown error");
-                setLoading(false);
-            });
+            .list()
+            .then(setPosts)
+            .catch((err) =>
+                setError(err instanceof Error ? err.message : "Failed to load posts")
+            )
+            .finally(() => setLoading(false));
+    }, [setPosts]);
 
-        return () => controller.abort();
-    }, []);
+    const filteredPosts = q
+        ? posts.filter(
+            (p) =>
+                p.title.toLowerCase().includes(q) ||
+                p.content.toLowerCase().includes(q)
+        )
+        : posts;
 
     return (
         <div className={styles.page}>
@@ -38,31 +43,31 @@ export default function Home() {
 
             {error && <p className={styles.error}>{error}</p>}
 
-            <div className={styles.layout}>
-                <aside className={styles.filters} aria-label="Filters" />
-
-                <main className={styles.content}>
-                    {loading ? (
-                        <p className={styles.loading}>Loading...</p>
-                    ) : (
-                        <ul className={styles.cards} aria-label="Posts">
-                            {posts.map((p) => (
-                                <li key={p.id} className={styles.cardItem}>
-                                    <Post
-                                        id={p.id}
-                                        title={p.title}
-                                        excerpt={p.content}
-                                        thumbnailUrl={p.thumbnail_url}
-                                        createdAt={p.createdAt}
-                                        author={p.author}
-                                        categories={p.categories}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </main>
-            </div>
+            <main className={styles.content}>
+                {loading ? (
+                    <p>Loading...</p>
+                ) : filteredPosts.length === 0 ? (
+                    <p className={styles.noResults}>
+                        No results found for <strong>“{q}”</strong>.
+                    </p>
+                ) : (
+                    <ul className={styles.cards} aria-label="Posts">
+                        {filteredPosts.map((p) => (
+                            <li key={p.id}>
+                                <Post
+                                    id={p.id}
+                                    title={p.title}
+                                    excerpt={p.content}
+                                    thumbnailUrl={p.thumbnail_url}
+                                    createdAt={p.createdAt}
+                                    author={p.author}
+                                    categories={p.categories}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </main>
         </div>
     );
 }
