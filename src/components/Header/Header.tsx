@@ -61,8 +61,16 @@ export default function Header({ closeOnSubmitMobile = true }: HeaderProps) {
                 }}
             >
                 <input
+                    type="search"
                     value={query}
-                    onChange={(e) => setQuery(e.target.value)}
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        setQuery(value);
+
+                        if (value === "") {
+                            setSearchParams({});
+                        }
+                    }}
                     placeholder="Search"
                     className={styles.input}
                     aria-label="Search posts"
