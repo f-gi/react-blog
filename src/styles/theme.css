@@ -51,8 +51,9 @@
 
     /* Common */
     --radius-pill: 999px;
+    --radius-card: 16px;
     --border-1: 1px solid var(--neutral-light);
-
+    --card-border: 1px solid var(--neutral-extra-light);
     /* Spacing */
     --space-2: 8px;
     --space-3: 12px;

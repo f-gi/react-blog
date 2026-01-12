@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Post from "../components/Post/Post";
 import { postsService } from "../services/posts.service";
 import type { PostList } from "../types/blog";
 
@@ -37,34 +38,22 @@ export default function Home() {
             {loading ? (
                 <p>Loading...</p>
             ) : (
-                <ul>
-                    {posts.map((post) => (
-                        <li key={post.id} style={{ marginBottom: 24 }}>
-                            <img
-                                src={post.thumbnail_url}
-                                alt={post.title}
-                                style={{ width: 320, height: "auto", display: "block" }}
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexWrap: "wrap", gap: 16 }}>
+                    {posts.map((p) => (
+                        <li key={p.id}>
+                            <Post
+                                id={p.id}
+                                title={p.title}
+                                excerpt={p.content}
+                                thumbnailUrl={p.thumbnail_url}
+                                createdAt={p.createdAt}
+                                author={p.author}
+                                categories={p.categories}
                             />
-
-                            <div>
-                                <div>
-                                    <span>{post.createdAt}</span> --- <span>{post.author?.name}</span>
-                                </div>
-
-                                <h2>{post.title}</h2>
-                                <p>{post.content}</p>
-
-                                <div>
-                                    {post.categories?.map((category) => (
-                                        <span key={category.id} style={{ marginRight: 8 }}>
-                                            {category.name}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
                         </li>
                     ))}
                 </ul>
+
             )}
         </div>
     );

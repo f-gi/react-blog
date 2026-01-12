@@ -1,0 +1,116 @@
+.card {
+    width: 100%;
+    max-width: 314px;
+
+    border-radius: var(--radius-card);
+    overflow: hidden;
+
+    background: var(--neutral-lightest);
+    border: var(--card-border);
+}
+
+.coverLink {
+    display: grid;
+    text-decoration: none;
+    color: inherit;
+}
+
+.media {
+    width: 100%;
+    height: 196px;
+    background: var(--neutral-extra-light);
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.imagePlaceholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+            var(--neutral-extra-light),
+            var(--neutral-light));
+}
+
+.body {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    color: var(--neutral-extra-dark);
+    font-size: var(--caption-size);
+    line-height: var(--caption-line);
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--secondary-light);
+    display: inline-block;
+}
+
+.title {
+    margin: 0;
+    color: var(--primary-light);
+
+    font-size: var(--h2-size);
+    line-height: var(--h2-line);
+    font-weight: var(--h2-weight);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.excerpt {
+    margin: 0;
+    color: var(--neutral-darkest);
+
+    font-size: var(--body-sm-size);
+    line-height: var(--body-sm-line);
+    font-weight: var(--body-regular);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.categories {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.tag {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 12px;
+    border-radius: 42px;
+
+    background: var(--neutral-extra-light);
+    color: var(--neutral-extra-dark);
+
+    font-size: var(--caption-size);
+    line-height: var(--caption-line);
+}
